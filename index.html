@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZV Edit Lab</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 75% 15%, rgba(86, 55, 180, 0.22), transparent 28%),
+                radial-gradient(circle at 20% 80%, rgba(0, 110, 255, 0.16), transparent 30%),
+                #05060a;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: rgba(7, 9, 15, 0.82);
+            border-right: 1px solid rgba(110, 130, 255, 0.14);
+
+            padding: 28px 18px;
+
+            backdrop-filter: blur(20px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            margin-bottom: 45px;
+            padding-left: 8px;
+        }
+
+        .logo-box {
+            width: 43px;
+            height: 43px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: linear-gradient(135deg, #168cff, #743cff);
+
+            font-weight: 900;
+            font-size: 14px;
+
+            box-shadow:
+                0 0 25px rgba(70, 80, 255, 0.35);
+        }
+
+        .logo-name {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .logo-sub {
+            color: #686f82;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .nav-title {
+            color: #454b5b;
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin: 0 10px 10px;
+        }
+
+        .nav-button {
+            width: 100%;
+
+            border: 0;
+            background: transparent;
+
+            color: #747b8e;
+
+            padding: 13px 12px;
+            margin-bottom: 4px;
+
+            border-radius: 9px;
+
+            text-align: left;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .nav-button:hover {
+            background: rgba(70, 90, 180, 0.10);
+            color: white;
+        }
+
+        .nav-button.active {
+            color: white;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(28, 117, 255, 0.18),
+                    rgba(118, 54, 255, 0.10)
+                );
+
+            border: 1px solid rgba(76, 105, 255, 0.15);
+        }
+
+        .nav-icon {
+            margin-right: 10px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            padding: 55px 65px;
+
+            max-width: 1400px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            margin-bottom: 45px;
+        }
+
+        .small-label {
+            color: #518dff;
+            font-size: 9px;
+            font-weight: bold;
+            letter-spacing: 2px;
+
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 52px;
+            letter-spacing: -3px;
+        }
+
+        .description {
+            color: #70778a;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .online {
+            color: #777f92;
+            font-size: 11px;
+        }
+
+        .online-dot {
+            display: inline-block;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #6c9cff;
+
+            margin-right: 6px;
+
+            box-shadow: 0 0 12px #3f79ff;
+        }
+
+        /* HERO */
+
+        .hero {
+            position: relative;
+
+            min-height: 310px;
+
+            padding: 45px;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    rgba(16, 28, 55, 0.95),
+                    rgba(30, 14, 57, 0.9)
+                );
+
+            border: 1px solid rgba(98, 111, 255, 0.18);
+
+            box-shadow:
+                0 20px 80px rgba(30, 40, 120, 0.12);
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 400px;
+            height: 400px;
+
+            right: -130px;
+            top: -170px;
+
+            background: #673bff;
+
+            filter: blur(130px);
+
+            opacity: 0.22;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+
+            max-width: 510px;
+        }
+
+        .hero h2 {
+            font-size: 32px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: #8b92a5;
+
+            font-size: 13px;
+            line-height: 1.7;
+
+            margin-top: 14px;
+            margin-bottom: 25px;
+        }
+
+        .button {
+            border: 0;
+
+            padding: 12px 18px;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #178dff,
+                    #743cff
+                );
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 30px rgba(64, 75, 255, 0.25);
+
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 35px rgba(64, 75, 255, 0.4);
+        }
+
+        /* GRAPH */
+
+        .graph {
+            position: absolute;
+
+            right: 50px;
+            top: 45px;
+
+            width: 42%;
+            height: 220px;
+
+            opacity: 0.9;
+        }
+
+        .graph-grid {
+            position: absolute;
+
+            inset: 0;
+
+            background-image:
+                linear-gradient(rgba(120,140,255,.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(120,140,255,.08) 1px, transparent 1px);
+
+            background-size: 32px 32px;
+
+            border-radius: 12px;
+        }
+
+        .graph svg {
+            position: absolute;
+
+            width: 100%;
+            height: 100%;
+        }
+
+        .graph path {
+            fill: none;
+
+            stroke: #6b8dff;
+
+            stroke-width: 4;
+
+            filter:
+                drop-shadow(0 0 8px rgba(77,110,255,.7));
+        }
+
+        /* TOOLS */
+
+        .tools {
+            margin-top: 55px;
+        }
+
+        .tools-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .tools-header h2 {
+            font-size: 23px;
+        }
+
+        .tools-header span {
+            color: #565d70;
+            font-size: 11px;
+        }
+
+        .cards {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+        }
+
+        .card {
+            min-height: 190px;
+
+            padding: 23px;
+
+            border-radius: 15px;
+
+            background: rgba(12, 15, 23, 0.8);
+
+            border: 1px solid rgba(100, 115, 150, 0.12);
+
+            transition: 0.2s;
+
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(83, 113, 255, 0.35);
+
+            background:
+                rgba(17, 21, 33, 0.95);
+
+            box-shadow:
+                0 15px 40px rgba(30, 50, 150, 0.12);
+        }
+
+        .card-icon {
+            width: 38px;
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(24, 139, 255, .16),
+                    rgba(118, 57, 255, .16)
+                );
+
+            color: #76a0ff;
+
+            margin-bottom: 22px;
+        }
+
+        .card h3 {
+            font-size: 14px;
+        }
+
+        .card p {
+            color: #686f81;
+
+            font-size: 11px;
+            line-height: 1.6;
+
+            margin-top: 8px;
+        }
+
+        .card-link {
+            display: block;
+
+            color: #6594ff;
+
+            font-size: 10px;
+
+            margin-top: 17px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 70px;
+            }
+
+            .logo-name,
+            .logo-sub,
+            .nav-title,
+            .nav-button span {
+                display: none;
+            }
+
+            .main {
+                margin-left: 70px;
+                padding: 35px 25px;
+            }
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .graph {
+                display: none;
+            }
+        }
+
+        .resources {
+            margin-top: 35px;
+        }
+
+        .resource-card {
+            margin-top: 20px;
+            padding: 22px;
+            border: 1px solid rgba(83,113,255,.18);
+            border-radius: 16px;
+            background: rgba(10,14,24,.78);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .resource-info { display:flex; align-items:center; gap:16px; }
+        .resource-icon {
+            width:54px; height:54px; border-radius:14px; display:flex;
+            align-items:center; justify-content:center; text-align:center;
+            font-weight:800; line-height:1.05; color:#fff;
+            background:linear-gradient(135deg,#188bff,#7639ff);
+            box-shadow:0 10px 30px rgba(70,70,255,.18);
+        }
+        .resource-info h3 { margin:0; font-size:14px; }
+        .resource-info p { margin:6px 0 0; color:#686f81; font-size:11px; line-height:1.6; }
+        .resource-button {
+            display:inline-flex; align-items:center; justify-content:center;
+            padding:10px 15px; border-radius:10px; text-decoration:none;
+            color:#fff; font-size:11px; font-weight:700;
+            background:linear-gradient(135deg,#188bff,#7639ff);
+            border:1px solid rgba(255,255,255,.08);
+            transition:.2s; white-space:nowrap;
+        }
+        .resource-button:hover { transform:translateY(-2px); box-shadow:0 10px 28px rgba(76,75,255,.22); }
+        .resource-note { margin-top:10px; color:#555d70; font-size:10px; }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-box">
+                ZV
+            </div>
+
+            <div>
+                <div class="logo-name">
+                    Edit Lab
+                </div>
+
+                <div class="logo-sub">
+                    AFTER EFFECTS
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="nav-title">
+            WORKSPACE
+        </div>
+
+
+        <button class="nav-button active">
+            <span class="nav-icon">⌂</span>
+            <span>Home</span>
+        </button>
+
+
+        <button class="nav-button">
+            <span class="nav-icon">⌁</span>
+            <span>Flow Curves</span>
+        </button>
+
+
+        <button class="nav-button">
+            <span class="nav-icon">✦</span>
+            <span>Transitions</span>
+        </button>
+
+
+        <button class="nav-button">
+            <span class="nav-icon">◈</span>
+            <span>Presets</span>
+        </button>
+
+
+        <button class="nav-button">
+            <span class="nav-icon">⚙</span>
+            <span>Tools</span>
+        </button>
+
+        <button class="nav-button">
+            <span class="nav-icon">⬇</span>
+            <span>Resources</span>
+        </button>
+
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="top">
+
+            <div>
+
+                <div class="small-label">
+                    AFTER EFFECTS TOOLKIT
+                </div>
+
+                <h1>
+                    Edit smarter.
+                </h1>
+
+                <p class="description">
+                    Curves, transitions and tools built for editors.
+                </p>
+
+            </div>
+
+
+            <div class="online">
+                <span class="online-dot"></span>
+                ZV SYSTEM ONLINE
+            </div>
+
+        </div>
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="small-label">
+                    QUICK START
+                </div>
+
+                <h2>
+                    Shape your movement.
+                </h2>
+
+                <p>
+                    Build smooth animation curves for After Effects
+                    without wasting time digging through settings.
+                </p>
+
+                <button class="button">
+                    Open Flow Curves →
+                </button>
+
+            </div>
+
+
+            <div class="graph">
+
+                <div class="graph-grid"></div>
+
+                <svg viewBox="0 0 500 250">
+
+                    <path
+                        d="M20 225
+                           C90 225 100 35 235 35
+                           C345 35 390 110 480 20"
+                    />
+
+                </svg>
+
+            </div>
+
+        </section>
+
+
+        <!-- TOOLS -->
+
+        <section class="tools">
+
+            <div class="tools-header">
+
+                <div>
+                    <div class="small-label">
+                        WORKSPACE
+                    </div>
+
+                    <h2>
+                        Tools
+                    </h2>
+                </div>
+
+                <span>
+                    4 tools available
+                </span>
+
+            </div>
+
+
+            <div class="cards">
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ⌁
+                    </div>
+
+                    <h3>
+                        Flow Curves
+                    </h3>
+
+                    <p>
+                        Create smooth movement curves
+                        for your AE animations.
+                    </p>
+
+                    <span class="card-link">
+                        Open tool →
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ✦
+                    </div>
+
+                    <h3>
+                        Transitions
+                    </h3>
+
+                    <p>
+                        Build clean slides, zooms,
+                        blurs and movement.
+                    </p>
+
+                    <span class="card-link">
+                        Coming soon →
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ◈
+                    </div>
+
+                    <h3>
+                        AE Presets
+                    </h3>
+
+                    <p>
+                        Organize your favorite
+                        animation settings.
+                    </p>
+
+                    <span class="card-link">
+                        Coming soon →
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ⚙
+                    </div>
+
+                    <h3>
+                        Editor Tools
+                    </h3>
+
+                    <p>
+                        Handy calculators and
+                        helpers for After Effects.
+                    </p>
+
+                    <span class="card-link">
+                        Coming soon →
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+        <section class="resources">
+            <div class="tools-header">
+                <div>
+                    <div class="small-label">SOFTWARE &amp; RESOURCES</div>
+                    <h2>After Effects</h2>
+                </div>
+                <span>Direct resource</span>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-info">
+                    <div class="resource-icon">After Effects<br>2020</div>
+                    <div>
+                        <h3>After Effects 2020</h3>
+                        <p>Open the Mega resource you provided for the Adobe-related files inside.</p>
+                    </div>
+                </div>
+                <a class="resource-button" href="https://mega.nz/file/CIdywTaI#AmsY0wTMOEW6pj7NiX8-XBdjiVFPmIaeu69nHzr38iM" target="_blank" rel="noopener noreferrer">Open AE 2020 →</a>
+            </div>
+
+            <div class="resource-note">ZV Editors opens the link you supplied in a new tab. Make sure you have the rights to use and distribute any files you share.</div>
+        </section>
+
+    </main>
+
+
+    <script>
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                if (button.textContent.includes('Resources')) {
+                    document.querySelector('.resources')?.scrollIntoView({behavior:'smooth'});
+                } else {
+                    window.scrollTo({top:0, behavior:'smooth'});
+                }
+            });
+        });
+    </script>
+</body>
+</html>
