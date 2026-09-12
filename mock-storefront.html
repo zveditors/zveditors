@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORBIT — demo storefront</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14162B;
+    --bg-panel: #1E2142;
+    --text: #F2F0EA;
+    --muted: #9CA0C4;
+    --accent-1: #FFB56B;
+    --accent-2: #FF6FA8;
+    --success: #6EE7B7;
+    --border: rgba(242,240,234,0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  .demo-tag {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 5px 10px;
+    border-radius: 999px;
+    z-index: 5;
+    background: rgba(20,22,43,0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .hero {
+    min-height: 100vh;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 40px;
+    padding: 80px 32px;
+    position: relative;
+  }
+
+  @media (max-width: 780px) {
+    .hero { grid-template-columns: 1fr; padding-top: 100px; }
+  }
+
+  .hero-text h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.1;
+    margin: 0 0 20px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: riseIn 0.7s ease forwards;
+    animation-delay: 0.1s;
+  }
+
+  .hero-text p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 44ch;
+    margin: 0 0 32px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: riseIn 0.7s ease forwards;
+    animation-delay: 0.3s;
+  }
+
+  .price-row {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: riseIn 0.7s ease forwards;
+    animation-delay: 0.5s;
+  }
+
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .buy-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #191225;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    border: none;
+    border-radius: 999px;
+    padding: 15px 28px;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(255,111,168,0.5);
+    animation: breathe 2.6s ease-in-out infinite;
+    transition: transform 0.15s ease;
+  }
+
+  .buy-btn:hover { transform: translateY(-2px) scale(1.02); }
+  .buy-btn:active { transform: translateY(0) scale(0.98); }
+
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,111,168,0.35); }
+    50% { box-shadow: 0 0 0 14px rgba(255,111,168,0); }
+  }
+
+  .fineprint {
+    display: block;
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .visual {
+    position: relative;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .orb {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, var(--accent-1), var(--accent-2) 60%, transparent 75%);
+    filter: blur(6px);
+    animation: pulse 4.5s ease-in-out infinite;
+  }
+
+  .orb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,181,107,0.18), transparent 70%);
+    animation: pulse 4.5s ease-in-out infinite reverse;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.12); opacity: 1; }
+  }
+
+  .features {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 780px) {
+    .features { grid-template-columns: 1fr; }
+  }
+
+  .feature {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .feature.visible { opacity: 1; transform: translateY(0); }
+
+  .feature h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin: 0 0 6px;
+  }
+
+  .feature p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Modal */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,11,22,0.65);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+
+  .overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    width: 100%;
+    max-width: 400px;
+    padding: 28px;
+    transform: scale(0.94) translateY(8px);
+    transition: transform 0.25s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .overlay.open .modal { transform: scale(1) translateY(0); }
+
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .modal-head h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .modal-head span {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .close-btn:hover { color: var(--text); }
+
+  label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .field { margin-bottom: 16px; }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 0.92rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  input[type="text"]:focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 1px;
+  }
+
+  .pay-btn {
+    width: 100%;
+    margin-top: 4px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #191225;
+    background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s ease;
+  }
+
+  .pay-btn:hover { transform: translateY(-1px); }
+  .pay-btn:disabled { opacity: 0.7; cursor: default; transform: none; }
+
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid rgba(25,18,37,0.3);
+    border-top-color: #191225;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .spinner.show { display: inline-block; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .modal-demo-note {
+    margin-top: 14px;
+    font-size: 0.76rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 12px 0 4px;
+  }
+
+  .success-state.show { display: block; }
+  .checkout-form.hide { display: none; }
+
+  .check-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(110,231,183,0.15);
+    color: var(--success);
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    transform: scale(0.6);
+    animation: pop 0.4s cubic-bezier(.3,1.5,.4,1) forwards;
+  }
+
+  @keyframes pop { to { transform: scale(1); } }
+
+  .success-state h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    margin: 0 0 8px;
+  }
+
+  .success-state p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 20px;
+  }
+
+  .done-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .done-btn:hover { border-color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .hero-text h1, .hero-text p, .price-row { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<span class="demo-tag">demo — nothing here is real</span>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Light that breathes<br>with the room.</h1>
+    <p>ORBIT charges your phone and fills the room with slow, shifting light. No app, no fuss — just a dial and a dock.</p>
+    <div class="price-row">
+      <button class="buy-btn" id="openCheckout">Buy ORBIT — $89</button>
+      <span class="fineprint">Fake product, fake checkout — built to test animation, not to sell you anything.</span>
+    </div>
+  </div>
+  <div class="visual">
+    <div class="orb"></div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <h3>Wireless charging</h3>
+    <p>Set your phone on the base and it charges at 10W, no cable required.</p>
+  </div>
+  <div class="feature">
+    <h3>Sixteen million colors</h3>
+    <p>One dial cycles through the full range, or set it to drift slowly on its own.</p>
+  </div>
+  <div class="feature">
+    <h3>Dims after midnight</h3>
+    <p>ORBIT learns your evening and quietly lowers itself so it never keeps you up.</p>
+  </div>
+</section>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+
+    <div class="checkout-form" id="checkoutForm">
+      <div class="modal-head">
+        <div>
+          <h2 id="modalTitle">Checkout</h2>
+          <span>ORBIT — $89.00</span>
+        </div>
+        <button class="close-btn" id="closeModal" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="field">
+        <label for="cardName">Name on card</label>
+        <input type="text" id="cardName" placeholder="Jamie Rivera" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="cardNumber">Card number</label>
+        <input type="text" id="cardNumber" placeholder="4242 4242 4242 4242" autocomplete="off">
+      </div>
+      <div class="field field-row">
+        <div>
+          <label for="cardExp">Expiry</label>
+          <input type="text" id="cardExp" placeholder="MM / YY" autocomplete="off">
+        </div>
+        <div>
+          <label for="cardCvc">CVC</label>
+          <input type="text" id="cardCvc" placeholder="123" autocomplete="off">
+        </div>
+      </div>
+
+      <button class="pay-btn" id="payBtn">
+        <span class="spinner" id="paySpinner"></span>
+        <span id="payLabel">Pay $89.00</span>
+      </button>
+      <div class="modal-demo-note">This is a demo. No payment field is validated or sent anywhere.</div>
+    </div>
+
+    <div class="success-state" id="successState">
+      <div class="check-circle">&#10003;</div>
+      <h2>Nothing was charged</h2>
+      <p>This is a mock checkout for testing the flow — no real order was placed and no data was collected.</p>
+      <button class="done-btn" id="doneBtn">Close</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const overlay = document.getElementById('overlay');
+  const openBtn = document.getElementById('openCheckout');
+  const closeBtn = document.getElementById('closeModal');
+  const doneBtn = document.getElementById('doneBtn');
+  const payBtn = document.getElementById('payBtn');
+  const paySpinner = document.getElementById('paySpinner');
+  const payLabel = document.getElementById('payLabel');
+  const checkoutForm = document.getElementById('checkoutForm');
+  const successState = document.getElementById('successState');
+
+  function openModal() {
+    overlay.classList.add('open');
+    document.getElementById('cardName').focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    setTimeout(() => {
+      checkoutForm.classList.remove('hide');
+      successState.classList.remove('show');
+      payBtn.disabled = false;
+      paySpinner.classList.remove('show');
+      payLabel.textContent = 'Pay $89.00';
+      document.getElementById('cardName').value = '';
+      document.getElementById('cardNumber').value = '';
+      document.getElementById('cardExp').value = '';
+      document.getElementById('cardCvc').value = '';
+      openBtn.focus();
+    }, 200);
+  }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  doneBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+
+  // Fake "pay" flow — purely visual, nothing is sent or stored anywhere
+  payBtn.addEventListener('click', () => {
+    payBtn.disabled = true;
+    paySpinner.classList.add('show');
+    payLabel.textContent = 'Processing...';
+
+    setTimeout(() => {
+      checkoutForm.classList.add('hide');
+      successState.classList.add('show');
+    }, 1100);
+  });
+
+  // Gentle scroll-reveal for the feature row
+  const featureEls = document.querySelectorAll('.feature');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.3 });
+  featureEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
